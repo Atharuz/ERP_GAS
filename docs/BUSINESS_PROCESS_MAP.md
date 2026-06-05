@@ -20,12 +20,30 @@ Perubahan utama:
 #Concept
 
 Raw Material
-→ Production Recipe
-→ Produced Component
-→ Assembly Recipe
-→ Finished Goods
-→ Packaging Recipe
-→ Ready To Ship
+
+↓
+
+Production Recipe
+
+↓
+
+Produced Component
+
+↓
+
+Assembly Recipe
+
+↓
+
+Finished Goods
+
+↓
+
+Packaging Recipe
+
+↓
+
+Ready To Ship
 
 ---
 
