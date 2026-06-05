@@ -660,6 +660,7 @@ Packaging Process
 ↓
 
 Ready To Ship
+
 ↓
 
 Customer
