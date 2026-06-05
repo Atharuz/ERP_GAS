@@ -655,8 +655,11 @@ Finished Goods
 
 Level 3
 
-Packaging
+Packaging Process
 
+↓
+
+Ready To Ship
 ↓
 
 Customer
