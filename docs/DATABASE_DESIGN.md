@@ -319,6 +319,7 @@ transaction_type:
 * purchase
 * production
 * assembly
+* Packaging
 * sale
 * adjustment
 * opname
