@@ -110,6 +110,8 @@ Raw Material
 * packaging_name
 * inventory_uom_id
 * active
+* created_at
+* updated_at
 
 ---
 
@@ -319,7 +321,7 @@ transaction_type:
 * purchase
 * production
 * assembly
-* Packaging
+* packaging
 * sale
 * adjustment
 * opname
