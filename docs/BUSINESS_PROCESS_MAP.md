@@ -17,17 +17,7 @@ Perubahan utama:
 
 # Manufacturing Concept Revision
 
-## Previous Concept
-
-Raw Material
-→ Production
-→ Component
-→ Assembly
-→ Finished Goods
-
----
-
-## Revised Concept
+#Concept
 
 Raw Material
 → Production Recipe
