@@ -580,6 +580,7 @@ Dokumen resmi proyek:
 * UI_FLOW.md
 * IMPLEMENTATION_PLAN.md
 * PROJECT_GLOSSARY.md
+* MVP_SCOPE.md
 
 ---
 
