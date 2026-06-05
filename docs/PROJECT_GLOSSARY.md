@@ -157,14 +157,8 @@ Contoh:
 
 Definisi:
 
-Proses konsumsi Packaging Material
+Material yang digunakan dalam proses packaging
 untuk menyiapkan Finished Good agar siap dikirim.
-
-Packaging tidak menghasilkan item baru.
-
-Output proses Packaging adalah
-perubahan status Finished Good
-menjadi Ready To Ship.
 
 Contoh:
 
