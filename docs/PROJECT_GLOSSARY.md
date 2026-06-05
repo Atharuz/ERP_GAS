@@ -76,6 +76,7 @@ Contoh:
 * Purchase
 * Production
 * Assembly
+* Packaging
 * Sales
 * Adjustment
 * Opname
@@ -156,7 +157,14 @@ Contoh:
 
 Definisi:
 
-Material yang digunakan untuk proses packing.
+Proses konsumsi Packaging Material
+untuk menyiapkan Finished Good agar siap dikirim.
+
+Packaging tidak menghasilkan item baru.
+
+Output proses Packaging adalah
+perubahan status Finished Good
+menjadi Ready To Ship.
 
 Contoh:
 
