@@ -2841,10 +2841,1536 @@ Ready To Ship
 
 ---
 
-# PART 3 STATUS
 
-Ready For Review
 
+# SALES ORDERS
+
+## Purpose
+
+Mencatat pesanan customer dan melakukan reservasi stock.
+
+Sales Order menjadi dasar:
+
+* Shipment
+* Revenue
+* Customer History
+* Sales History
+
+---
+
+## Access Roles
+
+* Owner
+* Operations
+
+---
+
+## Screen Type
+
+List Page + Form Page
+
+---
+
+## Status Flow
+
+```text
+Draft
+↓
+Confirmed
+↓
+Shipped
+```
+
+Cancelled dapat dilakukan sebelum Shipped.
+
+---
+
+## Status Definitions
+
+### Draft
+
+Sales Order belum dikonfirmasi.
+
+Belum membuat reservation.
+
+---
+
+### Confirmed
+
+Sales Order dikonfirmasi.
+
+Reservation dibuat.
+
+---
+
+### Shipped
+
+Shipment selesai.
+
+Order selesai.
+
+---
+
+### Cancelled
+
+Order dibatalkan.
+
+Reservation dilepas.
+
+---
+
+# SALES ORDER LIST
+
+## Columns
+
+| Column       | Description     |
+| ------------ | --------------- |
+| SO Number    | Auto Generated  |
+| Order Date   | Tanggal Order   |
+| Customer     | Customer        |
+| Channel      | Channel         |
+| Total Amount | Total Penjualan |
+| Status       | Status          |
+| Created By   | User            |
+
+---
+
+## Filters
+
+* Date Range
+* Customer
+* Channel
+* Status
+
+---
+
+## Actions
+
+* Create
+* View
+* Edit Draft
+* Confirm
+* Cancel
+* Print
+
+---
+
+# SALES ORDER FORM
+
+## Header
+
+| Field         | Required |
+| ------------- | -------- |
+| SO Number     | Auto     |
+| Order Date    | Yes      |
+| Customer Name | Yes      |
+| Phone Number  | Yes      |
+| Channel       | Yes      |
+| Notes         | No       |
+
+---
+
+## Customer Auto Create
+
+Saat Sales Order disimpan:
+
+### Step 1
+
+Cari berdasarkan:
+
+```text
+Phone Number
+```
+
+---
+
+### Step 2
+
+Jika tidak ditemukan:
+
+Cari berdasarkan:
+
+```text
+Customer Name
+```
+
+---
+
+### Step 3
+
+Jika ditemukan kemungkinan duplikasi:
+
+Tampilkan warning.
+
+---
+
+### Step 4
+
+Jika customer tidak ditemukan:
+
+Buat Customer baru otomatis.
+
+---
+
+## Order Lines
+
+| Field      | Required |
+| ---------- | -------- |
+| Product    | Yes      |
+| Qty        | Yes      |
+| Unit Price | Yes      |
+
+---
+
+## Pricing Rules
+
+Saat Product dipilih:
+
+```text
+Product Master
+↓
+Selling Price
+↓
+Auto Fill
+```
+
+---
+
+User tetap dapat mengubah harga.
+
+---
+
+## Price Snapshot
+
+Saat SO disimpan:
+
+Sistem menyimpan:
+
+```text
+Product
+Unit Price
+Qty
+Line Total
+```
+
+Perubahan harga produk di masa depan tidak mempengaruhi histori.
+
+---
+
+## Calculated Fields
+
+### Line Total
+
+```text
+Qty × Unit Price
+```
+
+---
+
+### Order Total
+
+```text
+Sum(Line Total)
+```
+
+---
+
+## Validation Rules
+
+Minimal 1 item.
+
+Qty > 0
+
+Unit Price > 0
+
+---
+
+## Reservation Rules
+
+Saat SO Confirmed:
+
+```text
+Ready To Ship
+↓
+Reserved
+```
+
+---
+
+### Validation
+
+```text
+Order Qty
+<=
+Available Qty
+```
+
+---
+
+Available Qty:
+
+```text
+Ready To Ship
+-
+Reserved
+```
+
+---
+
+Jika stock tidak cukup:
+
+```text
+Insufficient Available Stock
+```
+
+SO tidak dapat dikonfirmasi.
+
+---
+
+## Business Rules
+
+Confirm SO:
+
+```text
+Create Reservation
+```
+
+Cancel SO:
+
+```text
+Release Reservation
+```
+
+---
+
+## Related Screens
+
+* Customers
+* Products
+* Shipments
+
+---
+
+# SHIPMENTS
+
+## Purpose
+
+Mencatat pengiriman barang kepada customer.
+
+Shipment merupakan transaksi yang:
+
+* Mengurangi stock
+* Mengakui Revenue
+* Mengakui HPP
+
+---
+
+## Access Roles
+
+* Owner
+* Operations
+
+---
+
+## Screen Type
+
+List Page + Form Page
+
+---
+
+## Status Flow
+
+```text
+Draft
+↓
+Shipped
+```
+
+Cancelled hanya dapat dilakukan sebelum Shipped.
+
+---
+
+# SHIPMENT LIST
+
+## Columns
+
+| Column          | Description    |
+| --------------- | -------------- |
+| Shipment Number | Auto Generated |
+| Shipment Date   | Tanggal Kirim  |
+| SO Number       | Sales Order    |
+| Customer        | Customer       |
+| Courier         | Courier        |
+| Tracking Number | Resi           |
+| Status          | Status         |
+
+---
+
+## Filters
+
+* Date Range
+* Courier
+* Customer
+* Status
+
+---
+
+## Actions
+
+* Create Shipment
+* View
+* Ship
+* Print Packing Slip
+
+---
+
+# SHIPMENT FORM
+
+## Header
+
+| Field           | Required |
+| --------------- | -------- |
+| Shipment Number | Auto     |
+| Shipment Date   | Yes      |
+| Sales Order     | Yes      |
+| Courier         | Yes      |
+| Tracking Number | No       |
+| Notes           | No       |
+
+---
+
+## Shipment Lines
+
+Diambil otomatis dari Sales Order.
+
+Tidak dapat diubah.
+
+---
+
+## Validation Rules
+
+Sales Order wajib:
+
+```text
+Confirmed
+```
+
+---
+
+Qty Shipment:
+
+```text
+<= Reserved Qty
+```
+
+---
+
+## Shipment Completion Rules
+
+Saat status berubah menjadi:
+
+```text
+Shipped
+```
+
+sistem melakukan:
+
+```text
+Release Reservation
+
+Reduce Ready To Ship Stock
+
+Create Stock Movement
+
+Recognize Revenue
+
+Recognize HPP
+
+Create Audit Log
+```
+
+---
+
+## Revenue Recognition
+
+Revenue diakui saat Shipment Completed.
+
+---
+
+## HPP Recognition
+
+HPP diakui saat Shipment Completed.
+
+---
+
+## Related Screens
+
+* Sales Orders
+* Customers
+* Couriers
+* Stock Movement
+
+---
+
+# CUSTOMER HISTORY
+
+## Purpose
+
+Menampilkan histori transaksi customer.
+
+---
+
+## Access Roles
+
+* Owner
+* Operations
+
+---
+
+## Screen Type
+
+Detail Tab
+
+---
+
+## Customer Summary
+
+### Metrics
+
+* Total Orders
+* Total Revenue
+* First Order Date
+* Last Order Date
+
+---
+
+## Order History
+
+| Column        | Description |
+| ------------- | ----------- |
+| SO Number     | Sales Order |
+| Date          | Order Date  |
+| Product Count | Jumlah Item |
+| Total Amount  | Nilai Order |
+
+---
+
+## Filters
+
+* Date Range
+
+---
+
+## Business Rules
+
+Data berasal dari:
+
+```text
+Sales Orders
+```
+
+---
+
+# SALES HISTORY
+
+## Purpose
+
+Menampilkan histori penjualan seluruh sistem.
+
+---
+
+## Access Roles
+
+* Owner
+* Operations
+
+---
+
+## Screen Type
+
+Report Page
+
+---
+
+## Columns
+
+| Column        | Description |
+| ------------- | ----------- |
+| Shipment Date | Tanggal     |
+| SO Number     | Sales Order |
+| Customer      | Customer    |
+| Product       | Product     |
+| Qty           | Quantity    |
+| Unit Price    | Harga       |
+| Revenue       | Revenue     |
+| HPP           | HPP         |
+| Gross Profit  | Profit      |
+
+---
+
+## Filters
+
+* Date Range
+* Product
+* Customer
+* Channel
+
+---
+
+## Calculations
+
+### Revenue
+
+```text
+Qty × Selling Price
+```
+
+---
+
+### Gross Profit
+
+```text
+Revenue
+-
+HPP
+```
+
+---
+
+## Business Rules
+
+Data hanya berasal dari:
+
+```text
+Shipped Orders
+```
+
+---
+
+# PART 4 COMPLETION CHECKLIST
+
+## Sales
+
+✅ Sales Orders
+
+✅ Customer Auto Create
+
+✅ Price Snapshot
+
+✅ Inventory Reservation
+
+---
+
+## Shipping
+
+✅ Shipments
+
+✅ Revenue Recognition
+
+✅ HPP Recognition
+
+---
+
+## History
+
+✅ Customer History
+
+✅ Sales History
+
+---
+# PART 5 — REPORTS & AUDIT
+
+---
+
+# REPORT DASHBOARD
+
+## Purpose
+
+Memberikan ringkasan performa bisnis dalam satu layar.
+
+---
+
+## Access Roles
+
+* Owner
+
+---
+
+## Screen Type
+
+Dashboard Page
+
+---
+
+## KPI Cards
+
+### Revenue
+
+```text
+Selected Period Revenue
+```
+
+---
+
+### HPP
+
+```text
+Selected Period COGS
+```
+
+---
+
+### Gross Profit
+
+```text
+Revenue
+-
+HPP
+```
+
+---
+
+### Orders
+
+Jumlah Sales Order.
+
+---
+
+### Units Sold
+
+Jumlah produk terjual.
+
+---
+
+### Inventory Value
+
+Nilai inventory saat ini.
+
+---
+
+### Open Work Orders
+
+Jumlah Work Order aktif.
+
+---
+
+### Open Assembly Orders
+
+Jumlah Assembly Order aktif.
+
+---
+
+### Pending Shipments
+
+Jumlah Shipment belum selesai.
+
+---
+
+## Widgets
+
+### Revenue Trend
+
+Revenue per hari / minggu / bulan.
+
+---
+
+### Product Performance
+
+Top selling products.
+
+---
+
+### Channel Performance
+
+Top sales channels.
+
+---
+
+### Low Stock Alerts
+
+Item yang berada di bawah minimum stock.
+
+---
+
+### Recent Activities
+
+Aktivitas terbaru sistem.
+
+---
+
+# INVENTORY REPORTS
+
+---
+
+# STOCK BALANCE REPORT
+
+## Purpose
+
+Menampilkan saldo stock saat ini.
+
+---
+
+## Access Roles
+
+* Owner
+* Operations
+
+---
+
+## Columns
+
+| Column        | Description  |
+| ------------- | ------------ |
+| Item Code     | Item         |
+| Item Name     | Nama         |
+| Item Type     | Type         |
+| UoM           | UoM          |
+| Current Stock | Stock        |
+| Minimum Stock | Min Stock    |
+| Status        | Normal / Low |
+
+---
+
+## Filters
+
+* Item Type
+* Category
+* Low Stock Only
+
+---
+
+## Export
+
+* Excel
+* CSV
+
+---
+
+# STOCK MOVEMENT REPORT
+
+## Purpose
+
+Audit seluruh pergerakan inventory.
+
+---
+
+## Access Roles
+
+* Owner
+* Operations
+
+---
+
+## Columns
+
+| Column        | Description |
+| ------------- | ----------- |
+| Date          | Timestamp   |
+| Item          | Item        |
+| Movement Type | Source      |
+| Qty In        | Masuk       |
+| Qty Out       | Keluar      |
+| Balance       | Saldo       |
+| Reference     | Referensi   |
+
+---
+
+## Filters
+
+* Date Range
+* Item
+* Movement Type
+
+---
+
+## Export
+
+* Excel
+* CSV
+
+---
+
+# LOW STOCK REPORT
+
+## Purpose
+
+Menampilkan item yang harus segera dibeli atau diproduksi.
+
+---
+
+## Access Roles
+
+* Owner
+* Operations
+
+---
+
+## Logic
+
+```text
+Current Stock
+<=
+Minimum Stock
+```
+
+---
+
+## Columns
+
+| Column        | Description |
+| ------------- | ----------- |
+| Item          | Item        |
+| Current Stock | Stock       |
+| Minimum Stock | Minimum     |
+| Shortage      | Kekurangan  |
+
+---
+
+# PURCHASING REPORTS
+
+---
+
+# PURCHASE ORDER REPORT
+
+## Purpose
+
+Ringkasan Purchase Order.
+
+---
+
+## Access Roles
+
+* Owner
+* Operations
+
+---
+
+## Columns
+
+| Column       | Description |
+| ------------ | ----------- |
+| PO Number    | PO          |
+| Supplier     | Supplier    |
+| Date         | Tanggal     |
+| Total Amount | Nilai       |
+| Status       | Status      |
+
+---
+
+## Filters
+
+* Date Range
+* Supplier
+* Status
+
+---
+
+## Export
+
+* Excel
+* CSV
+
+---
+
+# SUPPLIER PRICE HISTORY REPORT
+
+## Purpose
+
+Analisis histori harga supplier.
+
+---
+
+## Access Roles
+
+* Owner
+
+---
+
+## Columns
+
+| Column    | Description |
+| --------- | ----------- |
+| Date      | Tanggal     |
+| Supplier  | Supplier    |
+| Item      | Item        |
+| Price     | Harga       |
+| PO Number | Referensi   |
+
+---
+
+## Filters
+
+* Supplier
+* Item
+* Date Range
+
+---
+
+# PRODUCTION REPORTS
+
+---
+
+# WORK ORDER HISTORY
+
+## Purpose
+
+Menampilkan histori produksi.
+
+---
+
+## Access Roles
+
+* Owner
+* Operations
+
+---
+
+## Columns
+
+| Column             | Description |
+| ------------------ | ----------- |
+| WO Number          | Work Order  |
+| Date               | Tanggal     |
+| Produced Component | Output      |
+| Planned Qty        | Planned     |
+| Actual Qty         | Actual      |
+| Variance           | Selisih     |
+
+---
+
+## Filters
+
+* Date Range
+* Produced Component
+
+---
+
+# PRODUCTION COST REPORT
+
+## Purpose
+
+Analisis biaya produksi Produced Component.
+
+---
+
+## Access Roles
+
+* Owner
+
+---
+
+## Columns
+
+| Column             | Description |
+| ------------------ | ----------- |
+| Produced Component | Output      |
+| Recipe Version     | Version     |
+| Material Cost      | Material    |
+| Production Cost    | Total       |
+| Cost Per Unit      | Unit Cost   |
+
+---
+
+## Filters
+
+* Produced Component
+* Date Range
+
+---
+
+# ASSEMBLY REPORTS
+
+---
+
+# ASSEMBLY HISTORY REPORT
+
+## Purpose
+
+Menampilkan histori Assembly Order.
+
+---
+
+## Access Roles
+
+* Owner
+* Operations
+
+---
+
+## Columns
+
+| Column          | Description |
+| --------------- | ----------- |
+| Assembly Number | Number      |
+| Product         | Product     |
+| Planned Qty     | Planned     |
+| Actual Qty      | Actual      |
+| Variance        | Variance    |
+
+---
+
+## Filters
+
+* Product
+* Date Range
+
+---
+
+# PRODUCT COST REPORT
+
+## Purpose
+
+Analisis biaya Product.
+
+---
+
+## Access Roles
+
+* Owner
+
+---
+
+## Columns
+
+| Column         | Description   |
+| -------------- | ------------- |
+| Product        | Product       |
+| Recipe Version | Version       |
+| Component Cost | Components    |
+| Assembly Cost  | Assembly      |
+| Unit Cost      | Cost Per Unit |
+
+---
+
+# PACKAGING REPORTS
+
+---
+
+# PACKAGING HISTORY REPORT
+
+## Purpose
+
+Menampilkan histori Packaging Execution.
+
+---
+
+## Access Roles
+
+* Owner
+* Operations
+
+---
+
+## Columns
+
+| Column           | Description |
+| ---------------- | ----------- |
+| Packaging Number | Number      |
+| Product          | Product     |
+| Planned Qty      | Planned     |
+| Actual Qty       | Actual      |
+| Packaging Cost   | Cost        |
+
+---
+
+## Filters
+
+* Product
+* Date Range
+
+---
+
+# SALES REPORTS
+
+---
+
+# SALES HISTORY REPORT
+
+## Purpose
+
+Menampilkan histori penjualan.
+
+---
+
+## Access Roles
+
+* Owner
+* Operations
+
+---
+
+## Columns
+
+| Column        | Description |
+| ------------- | ----------- |
+| Shipment Date | Date        |
+| SO Number     | SO          |
+| Customer      | Customer    |
+| Product       | Product     |
+| Qty           | Qty         |
+| Unit Price    | Price       |
+| Revenue       | Revenue     |
+
+---
+
+## Filters
+
+* Date Range
+* Product
+* Customer
+* Channel
+
+---
+
+## Export
+
+* Excel
+* CSV
+
+---
+
+# PRODUCT PERFORMANCE REPORT
+
+## Purpose
+
+Menampilkan performa produk.
+
+---
+
+## Access Roles
+
+* Owner
+
+---
+
+## Metrics
+
+* Revenue
+* Units Sold
+* Average Selling Price
+* Gross Profit
+
+---
+
+## Filters
+
+* Product
+* Date Range
+
+---
+
+# CHANNEL PERFORMANCE REPORT
+
+## Purpose
+
+Menampilkan performa channel penjualan.
+
+---
+
+## Access Roles
+
+* Owner
+
+---
+
+## Metrics
+
+* Orders
+* Revenue
+* Units Sold
+* Gross Profit
+
+---
+
+## Filters
+
+* Channel
+* Date Range
+
+---
+
+# CUSTOMER PERFORMANCE REPORT
+
+## Purpose
+
+Menampilkan performa customer.
+
+---
+
+## Access Roles
+
+* Owner
+
+---
+
+## Metrics
+
+* Orders
+* Revenue
+* Units Purchased
+
+---
+
+## Filters
+
+* Customer
+* Date Range
+
+---
+
+# PROFITABILITY REPORTS
+
+---
+
+# GROSS PROFIT REPORT
+
+## Purpose
+
+Mengukur profitabilitas bisnis.
+
+---
+
+## Access Roles
+
+* Owner
+
+---
+
+## Formula
+
+```text
+Revenue
+-
+HPP
+=
+Gross Profit
+```
+
+---
+
+## Columns
+
+| Column         | Description |
+| -------------- | ----------- |
+| Product        | Product     |
+| Revenue        | Revenue     |
+| HPP            | Cost        |
+| Gross Profit   | Profit      |
+| Gross Margin % | Margin      |
+
+---
+
+## Filters
+
+* Product
+* Channel
+* Date Range
+
+---
+
+# PRODUCT PROFITABILITY REPORT
+
+## Purpose
+
+Menampilkan profitabilitas per produk.
+
+---
+
+## Access Roles
+
+* Owner
+
+---
+
+## Columns
+
+| Column       | Description |
+| ------------ | ----------- |
+| Product      | Product     |
+| Revenue      | Revenue     |
+| HPP          | HPP         |
+| Gross Profit | Profit      |
+| Margin %     | Margin      |
+
+---
+
+# AUDIT & SYSTEM REPORTS
+
+---
+
+# AUDIT LOG
+
+## Purpose
+
+Mencatat seluruh perubahan data master dan transaksi.
+
+---
+
+## Access Roles
+
+* Owner
+
+---
+
+## Columns
+
+| Column    | Description |
+| --------- | ----------- |
+| Timestamp | Waktu       |
+| User      | User        |
+| Entity    | Tabel       |
+| Entity ID | Record      |
+| Action    | Action      |
+| Old Value | Sebelum     |
+| New Value | Sesudah     |
+
+---
+
+## Actions Tracked
+
+* Create
+* Edit
+* Archive
+* Restore
+
+---
+
+## Filters
+
+* User
+* Entity
+* Date Range
+
+---
+
+# SYSTEM ACTIVITY LOG
+
+## Purpose
+
+Mencatat aktivitas pengguna dalam sistem.
+
+---
+
+## Access Roles
+
+* Owner
+
+---
+
+## Columns
+
+| Column    | Description |
+| --------- | ----------- |
+| Timestamp | Waktu       |
+| User      | User        |
+| Activity  | Aktivitas   |
+| Reference | Referensi   |
+
+---
+
+## Examples
+
+```text
+Login
+
+Create Purchase Order
+
+Post Goods Receipt
+
+Complete Work Order
+
+Complete Assembly Order
+
+Complete Packaging Execution
+
+Create Sales Order
+
+Complete Shipment
+```
+
+---
+
+## Filters
+
+* User
+* Activity
+* Date Range
+
+---
+
+# PART 5 COMPLETION CHECKLIST
+
+## Dashboard
+
+✅ Report Dashboard
+
+---
+
+## Inventory
+
+✅ Stock Balance Report
+
+✅ Stock Movement Report
+
+✅ Low Stock Report
+
+---
+
+## Purchasing
+
+✅ Purchase Order Report
+
+✅ Supplier Price History Report
+
+---
+
+## Production
+
+✅ Work Order History
+
+✅ Production Cost Report
+
+---
+
+## Assembly
+
+✅ Assembly History Report
+
+✅ Product Cost Report
+
+---
+
+## Packaging
+
+✅ Packaging History Report
+
+---
+
+## Sales
+
+✅ Sales History Report
+
+✅ Product Performance Report
+
+✅ Channel Performance Report
+
+✅ Customer Performance Report
+
+---
+
+## Profitability
+
+✅ Gross Profit Report
+
+✅ Product Profitability Report
+
+---
+
+## Audit
+
+✅ Audit Log
+
+✅ System Activity Log
 
 
 
