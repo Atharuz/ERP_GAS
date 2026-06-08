@@ -2087,9 +2087,764 @@ Create Audit Log
 
 ---
 
-# PART 2 STATUS
+# PART 3 — PRODUCTION, ASSEMBLY & PACKAGING
+
+---
+
+# PRODUCTION RECIPES
+
+## Purpose
+
+Mendefinisikan proses produksi yang mengubah:
+
+```text
+Raw Material
+↓
+Produced Component
+```
+
+Contoh:
+
+```text
+MDF
+Paint
+↓
+Gear 4x4
+```
+
+---
+
+## Access Roles
+
+* Owner
+* Operations
+
+---
+
+## Screen Type
+
+List Page
+
+---
+
+## Table Columns
+
+| Column           | Description               |
+| ---------------- | ------------------------- |
+| Recipe Code      | Auto Generated            |
+| Recipe Name      | Nama Recipe               |
+| Output Component | Produced Component        |
+| Version          | Recipe Version            |
+| Effective Date   | Berlaku Mulai             |
+| Status           | Draft / Active / Archived |
+
+---
+
+## Filters
+
+* Search
+* Status
+* Output Component
+
+---
+
+## Actions
+
+* Create Recipe
+* Open Builder
+* View
+* Archive Version
+
+---
+
+## Business Rules
+
+* Satu Produced Component dapat memiliki banyak version
+* Hanya 1 Active Version
+* Recipe lama tidak boleh dihapus
+* Recipe digunakan oleh Work Order
+
+---
+
+# PRODUCTION RECIPE BUILDER
+
+## Purpose
+
+Menyusun komposisi Material untuk menghasilkan Produced Component.
+
+---
+
+## Header
+
+| Field            | Required |
+| ---------------- | -------- |
+| Recipe Code      | Auto     |
+| Recipe Name      | Yes      |
+| Output Component | Yes      |
+| Output Qty       | Yes      |
+| Version          | Auto     |
+| Effective Date   | Yes      |
+
+---
+
+## Input Materials
+
+| Field           | Required |
+| --------------- | -------- |
+| Material        | Yes      |
+| Qty             | Yes      |
+| Consumption UoM | Yes      |
+
+---
+
+## Example
+
+```text
+Output
+
+Gear 4x4
+10 pcs
+
+Inputs
+
+MDF 3mm
+1 Sheet
+
+Paint
+10 ml
+```
+
+---
+
+## Validation Rules
+
+* Output Component wajib
+* Minimal 1 Material
+* Qty > 0
+
+---
+
+## Status Rules
+
+Draft
+
+↓
+
+Active
+
+↓
+
+Archived
+
+---
+
+## Snapshot Rules
+
+Saat Work Order dibuat:
+
+* Recipe Version disimpan
+* Material disimpan
+* Qty disimpan
+
+---
+
+# WORK ORDERS
+
+## Purpose
+
+Menjalankan proses produksi.
+
+---
+
+## Access Roles
+
+* Owner
+* Operations
+
+---
+
+## Screen Type
+
+List Page + Form Page
+
+---
+
+## Status Flow
+
+```text
+Draft
+↓
+Released
+↓
+In Progress
+↓
+Completed
+```
+
+Cancelled dapat dilakukan sebelum Completed.
+
+---
+
+## List Page
+
+### Columns
+
+| Column         | Description    |
+| -------------- | -------------- |
+| WO Number      | Auto Generated |
+| Recipe         | Recipe         |
+| Version        | Recipe Version |
+| Planned Output | Rencana        |
+| Actual Output  | Aktual         |
+| Status         | Status         |
+
+---
+
+## Form Header
+
+| Field           | Required |
+| --------------- | -------- |
+| WO Number       | Auto     |
+| Production Date | Yes      |
+| Recipe          | Yes      |
+| Recipe Version  | Snapshot |
+| Notes           | No       |
+
+---
+
+## Planned Production
+
+| Field              | Required |
+| ------------------ | -------- |
+| Planned Output Qty | Yes      |
+
+---
+
+## Material Consumption
+
+Dihitung otomatis dari Recipe.
+
+---
+
+## Production Result
+
+| Field             | Required |
+| ----------------- | -------- |
+| Actual Output Qty | Yes      |
+
+---
+
+## Variance
+
+```text
+Actual Output
+-
+Planned Output
+```
+
+---
+
+## Completion Rules
+
+Saat Completed:
+
+```text
+Consume Raw Materials
+Create Produced Component Stock
+Create Stock Movements
+Calculate Production Cost
+Create Audit Log
+```
+
+---
+
+## Related Screens
+
+* Production Recipes
+* Stock Movement
+* Produced Components
+
+---
+
+# ASSEMBLY RECIPES
+
+## Purpose
+
+Mendefinisikan proses Assembly yang mengubah:
+
+```text
+Produced Components
++
+Purchased Components
+↓
+Product
+```
+
+---
+
+## Access Roles
+
+* Owner
+* Operations
+
+---
+
+## Screen Type
+
+List Page
+
+---
+
+## Table Columns
+
+| Column         | Description    |
+| -------------- | -------------- |
+| Recipe Code    | Auto           |
+| Product        | Output Product |
+| Version        | Version        |
+| Effective Date | Effective Date |
+| Status         | Status         |
+
+---
+
+## Business Rules
+
+* Hanya 1 Active Version
+* Mendukung Recipe Versioning
+
+---
+
+# ASSEMBLY RECIPE BUILDER
+
+## Header
+
+| Field          | Required |
+| -------------- | -------- |
+| Product        | Yes      |
+| Output Qty     | Yes      |
+| Effective Date | Yes      |
+
+---
+
+## Component Inputs
+
+### Produced Components
+
+| Field     | Required |
+| --------- | -------- |
+| Component | Yes      |
+| Qty       | Yes      |
+
+---
+
+### Purchased Components
+
+| Field     | Required |
+| --------- | -------- |
+| Component | Yes      |
+| Qty       | Yes      |
+
+---
+
+## Example
+
+```text
+Output
+
+Busy Board Alphabet
+1 pcs
+
+Inputs
+
+Gear 4x4
+4 pcs
+
+Bel
+1 pcs
+
+Magnet
+2 pcs
+```
+
+---
+
+## Validation Rules
+
+Minimal 1 component.
+
+---
+
+## Snapshot Rules
+
+Saat Assembly Order dibuat:
+
+* Recipe Version
+* Components
+* Quantities
+
+disimpan ke transaksi.
+
+---
+
+# ASSEMBLY ORDERS
+
+## Purpose
+
+Menjalankan proses Assembly.
+
+---
+
+## Access Roles
+
+* Owner
+* Operations
+
+---
+
+## Screen Type
+
+List Page + Form Page
+
+---
+
+## Status Flow
+
+```text
+Draft
+↓
+Released
+↓
+In Progress
+↓
+Completed
+```
+
+---
+
+## Columns
+
+| Column          | Description |
+| --------------- | ----------- |
+| Assembly Number | Auto        |
+| Product         | Product     |
+| Planned Output  | Planned     |
+| Actual Output   | Actual      |
+| Status          | Status      |
+
+---
+
+## Form
+
+### Header
+
+| Field           | Required |
+| --------------- | -------- |
+| Assembly Number | Auto     |
+| Product         | Yes      |
+| Recipe Version  | Snapshot |
+| Assembly Date   | Yes      |
+
+---
+
+### Planned Output
+
+| Field       | Required |
+| ----------- | -------- |
+| Planned Qty | Yes      |
+
+---
+
+### Actual Output
+
+| Field      | Required |
+| ---------- | -------- |
+| Actual Qty | Yes      |
+
+---
+
+## Completion Rules
+
+Saat Completed:
+
+```text
+Consume Produced Components
+Consume Purchased Components
+
+Create Product Stock
+
+Create Stock Movements
+
+Calculate Assembly Cost
+```
+
+---
+
+## Related Screens
+
+* Assembly Recipes
+* Products
+* Stock Movement
+
+---
+
+# PACKAGING RECIPES
+
+## Purpose
+
+Mendefinisikan proses Packaging.
+
+Packaging bukan menghasilkan item baru.
+
+Packaging hanya mengubah status Product menjadi Ready To Ship.
+
+---
+
+## Access Roles
+
+* Owner
+* Operations
+
+---
+
+## Screen Type
+
+List Page
+
+---
+
+## Table Columns
+
+| Column         | Description    |
+| -------------- | -------------- |
+| Recipe Code    | Auto           |
+| Product        | Product        |
+| Version        | Version        |
+| Effective Date | Effective Date |
+| Status         | Status         |
+
+---
+
+## Business Rules
+
+* Mendukung versioning
+* Hanya 1 Active Version
+
+---
+
+# PACKAGING RECIPE BUILDER
+
+## Header
+
+| Field          | Required |
+| -------------- | -------- |
+| Product        | Yes      |
+| Effective Date | Yes      |
+
+---
+
+## Inputs
+
+### Packaging Materials
+
+| Field              | Required |
+| ------------------ | -------- |
+| Packaging Material | Yes      |
+| Qty                | Yes      |
+
+---
+
+## Example
+
+```text
+Busy Board Alphabet
+
+Bubble Wrap
+1 pcs
+
+Sticker
+1 pcs
+
+Kartu Ucapan
+1 pcs
+```
+
+---
+
+## Validation Rules
+
+Minimal 1 Packaging Material.
+
+---
+
+## Snapshot Rules
+
+Saat Packaging Execution dibuat:
+
+* Recipe Version
+* Packaging Materials
+* Quantities
+
+disimpan ke transaksi.
+
+---
+
+# PACKAGING EXECUTION
+
+## Purpose
+
+Menjalankan proses Packaging.
+
+---
+
+## Access Roles
+
+* Owner
+* Operations
+
+---
+
+## Screen Type
+
+List Page + Form Page
+
+---
+
+## Status Flow
+
+```text
+Draft
+↓
+Released
+↓
+In Progress
+↓
+Completed
+```
+
+---
+
+## Columns
+
+| Column           | Description |
+| ---------------- | ----------- |
+| Packaging Number | Auto        |
+| Product          | Product     |
+| Planned Qty      | Planned     |
+| Actual Qty       | Actual      |
+| Status           | Status      |
+
+---
+
+## Form
+
+### Header
+
+| Field            | Required |
+| ---------------- | -------- |
+| Packaging Number | Auto     |
+| Product          | Yes      |
+| Recipe Version   | Snapshot |
+| Packaging Date   | Yes      |
+
+---
+
+### Planned Output
+
+| Field       | Required |
+| ----------- | -------- |
+| Planned Qty | Yes      |
+
+---
+
+### Actual Output
+
+| Field      | Required |
+| ---------- | -------- |
+| Actual Qty | Yes      |
+
+---
+
+## Completion Rules
+
+Saat Completed:
+
+```text
+Consume Packaging Materials
+
+Add Packaging Cost To Product HPP
+
+Update Product Status
+
+Ready To Ship
+
+Create Stock Movements
+```
+
+---
+
+## Business Rules
+
+Packaging tidak menghasilkan Product baru.
+
+Packaging tidak mengubah quantity Product.
+
+Packaging hanya:
+
+```text
+Consume Packaging Material
+↓
+Tambah HPP
+↓
+Ready To Ship
+```
+
+---
+
+## Related Screens
+
+* Packaging Recipes
+* Packaging Materials
+* Products
+* Shipments
+
+---
+
+# PART 3 COMPLETION CHECKLIST
+
+## Production
+
+✅ Production Recipes
+
+✅ Production Recipe Builder
+
+✅ Work Orders
+
+---
+
+## Assembly
+
+✅ Assembly Recipes
+
+✅ Assembly Recipe Builder
+
+✅ Assembly Orders
+
+---
+
+## Packaging
+
+✅ Packaging Recipes
+
+✅ Packaging Recipe Builder
+
+✅ Packaging Execution
+
+---
+
+# PART 3 STATUS
 
 Ready For Review
+
 
 
 
