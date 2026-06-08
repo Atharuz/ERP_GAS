@@ -1,558 +1,694 @@
-# Ciluba ERP - Module Architecture v1.0
+# ERP Module Architecture v1.2
 
-## Purpose
+## Overview
 
-Dokumen ini mendefinisikan seluruh modul ERP Ciluba sebagai dasar:
+ERP Ciluba dibangun menggunakan pendekatan modular yang mengikuti alur bisnis perusahaan dari pembelian bahan baku hingga pengiriman produk ke customer.
 
-* UI Design
-* Menu Structure
-* Permission Design
-* Database Design
-* MVP Scope
+Setiap modul memiliki tanggung jawab yang jelas dan saling terintegrasi melalui inventory, production flow, dan sales flow.
 
 ---
 
-# Module Architecture
+# Module Structure
 
+```text
 Dashboard
 
 Master Data
+├── Materials
+├── Produced Components
+├── Purchased Components
+├── Products
+├── Suppliers
+├── Customers
+├── Sales Channels
+├── Categories
+└── Units of Measure
 
 Purchasing
+├── Purchase Orders
+├── Goods Receipts
+└── Supplier Price History
 
 Inventory
+├── Stock Overview
+├── Stock Movements
+├── Stock Opname
+└── Stock Adjustments
 
-Manufacturing
+Production
+├── Production Recipes
+├── Recipe Builder
+└── Work Orders
 
 Assembly
+├── Assembly Recipes
+├── Recipe Builder
+└── Assembly Orders
+
+Packaging
+├── Packaging Recipes
+├── Recipe Builder
+└── Packaging Execution
 
 Sales
-
-Shipping
+├── Sales Orders
+├── Shipments
+├── Customer History
+└── Sales History
 
 Reports
+├── Dashboard Reports
+├── Inventory Reports
+├── Purchasing Reports
+├── Production Reports
+├── Assembly Reports
+├── Packaging Reports
+├── Sales Reports
+└── Profitability Reports
 
-Audit Log
-
-Settings
+System
+├── Audit Logs
+├── Activity Logs
+└── Settings
+```
 
 ---
 
-# Dashboard
+# Dashboard Module
 
 ## Purpose
 
-Menampilkan kondisi bisnis secara real-time.
+Memberikan ringkasan operasional dan performa bisnis dalam satu layar.
 
-### Widgets
+## Features
 
-* Today's Revenue
-* Orders Today
-* Low Stock Alert
+### KPI Summary
+
+* Revenue
+* Gross Profit
+* Total Orders
+* Units Sold
+* Inventory Value
+
+### Operational Summary
+
+* Open Purchase Orders
 * Open Work Orders
 * Open Assembly Orders
 * Pending Shipments
-* Top Selling Products
-* Stock Value
-* Monthly Revenue
+
+### Alerts
+
+* Low Stock Items
+* Recent Activities
 
 ---
 
-# Master Data
+# Master Data Module
 
 ## Purpose
 
-Menyimpan seluruh data referensi ERP.
+Menyimpan seluruh data referensi yang digunakan oleh sistem.
 
-### Sub Modules
+## Components
 
-#### Material Master
+### Materials
 
-Raw Material
-
-Contoh:
-
-* Papan Jati
-* Cat
-* Beeswax
-* Tali
-
----
-
-#### Purchased Component Master
+Bahan baku yang digunakan pada proses produksi.
 
 Contoh:
 
-* Skrup
-* Ring
-* Handel
-* Krincingan
+```text
+MDF
+Cat
+Lem
+```
 
 ---
 
-#### Produced Component Master
+### Produced Components
+
+Komponen hasil produksi internal.
 
 Contoh:
 
-* Cube Kayu Toska
-* Gear Besar
-* Gear Kecil
+```text
+Gear
+Panel
+Wheel
+```
 
 ---
 
-#### Product Master
+### Purchased Components
+
+Komponen yang dibeli dari supplier.
 
 Contoh:
 
-* Busy Cube Toska Easy
-* Busy Cube Pink Easy
-* Busy Board Pink Difficult
-* Busy Board Toska Difficult
+```text
+Bell
+Magnet
+Switch
+```
 
 ---
 
-#### Packaging Material Master
+### Products
+
+Produk yang dijual ke customer.
 
 Contoh:
 
-* Kardus
-* Bubble Wrap
-* Sticker
-* Lakban
+```text
+Busy Board
+Busy Cube
+```
 
 ---
 
-#### Supplier Master
+### Suppliers
+
+Data pemasok material dan komponen.
 
 ---
 
-#### Customer Master
+### Customers
+
+Data customer.
+
+Customer dapat dibuat otomatis saat Sales Order dibuat.
+
+Sistem melakukan duplicate check menggunakan:
+
+* Phone Number
+* Customer Name
 
 ---
 
-#### Sales Channel Master
+### Sales Channels
 
-* Shopee
-* Tokopedia
-* TikTok Shop
-* WhatsApp
-* Instagram
-* Facebook
+Contoh:
 
----
-
-#### Courier Master
-
----
-
-#### UoM Master
+```text
+Shopee
+Tokopedia
+WhatsApp
+Instagram
+Website
+Offline
+```
 
 ---
 
-# Purchasing
+### Categories
+
+Kategori item yang didefinisikan user.
+
+Digunakan untuk:
+
+* Materials
+* Components
+* Products
+
+---
+
+### Units of Measure
+
+Contoh:
+
+```text
+PCS
+Sheet
+Meter
+ML
+KG
+Pack
+```
+
+---
+
+# Purchasing Module
 
 ## Purpose
 
-Mengelola pembelian material dan komponen.
+Mengelola proses pembelian material dan komponen.
 
-### Purchase Request
+## Components
 
-### Purchase Order
+### Purchase Orders
 
-### Goods Receipt
+Membuat pesanan pembelian ke supplier.
+
+Status:
+
+```text
+Draft
+Issued
+Partially Received
+Received
+Closed
+Cancelled
+```
+
+---
+
+### Goods Receipts
+
+Mencatat penerimaan barang dari supplier.
+
+Fungsi:
+
+* Menambah inventory
+* Menyimpan harga pembelian
+* Membentuk histori harga supplier
+
+---
 
 ### Supplier Price History
 
-### Purchase Analytics
+Menampilkan histori harga pembelian berdasarkan supplier dan item.
+
+Digunakan sebagai referensi pembelian berikutnya.
 
 ---
 
-# Inventory
+# Inventory Module
 
 ## Purpose
 
-Mengelola seluruh stok.
+Mengelola seluruh pergerakan inventory.
+
+## Components
 
 ### Stock Overview
 
-### Stock Movement
+Menampilkan saldo inventory saat ini.
 
-### Stock Opname
+Mendukung:
 
-### Stock Adjustment
-
-### Reorder Monitoring
-
-### Stock Valuation
+* Current Stock
+* Minimum Stock
+* Low Stock Alert
 
 ---
 
-# Manufacturing
+### Stock Movements
+
+Audit seluruh transaksi inventory.
+
+Sumber transaksi:
+
+* Goods Receipt
+* Work Order
+* Assembly Order
+* Packaging Execution
+* Shipment
+* Stock Adjustment
+
+---
+
+### Stock Opname
+
+Mencatat hasil perhitungan fisik stock.
+
+Tidak mengubah stock sistem.
+
+---
+
+### Stock Adjustments
+
+Mengubah stock sistem berdasarkan hasil review.
+
+Digunakan setelah Stock Opname.
+
+---
+
+# Production Module
 
 ## Purpose
 
 Mengubah Raw Material menjadi Produced Component.
 
----
+## Components
 
-## Production Recipe
+### Production Recipes
 
-### Features
+Mendefinisikan formula produksi.
 
-* Recipe Builder
-* Copy Recipe
+Mendukung:
+
 * Versioning
-* Revision History
-* Cost Preview
+* Effective Date
 
 ---
 
-## Work Order
+### Recipe Builder
 
-### Features
-
-* Create Work Order
-* Material Consumption
-* Production Output
-* Waste Recording
+Menyusun material yang digunakan dalam proses produksi.
 
 ---
 
-## Production Variance
+### Work Orders
 
-### Features
-
-* Planned Usage
-* Actual Usage
-* Variance
-
----
-
-## Yield Analysis
-
-### Features
-
-* Yield Tracking
-* Waste Percentage
-
----
-
-# Assembly
-
-## Purpose
-
-Mengubah Produced Component menjadi Finished Goods.
-
----
-
-## Assembly Recipe
-
-### Features
-
-* Recipe Builder
-* Copy Recipe
-* Versioning
-* Revision History
-
----
-
-## Assembly Order
-
-### Features
-
-* Create Assembly Order
-* Component Consumption
-* Finished Goods Output
-
----
-
-## Assembly Variance
-
-### Features
-
-* Planned vs Actual
-
----
-
-# Packaging
-
-## Purpose
-
-Mengelola kebutuhan packing.
-
----
-
-## Packaging Recipe
-
-### Features
-
-* Packaging Builder
-* Packaging Cost
-
----
-
-## Packaging Execution
-
-### Features
-
-* Consume Packaging Material
-* Mark Ready To Ship
-
----
-
-# Sales
-
-## Purpose
-
-Mengelola pesanan pelanggan.
-
----
-
-## Sales Order
-
-### Features
-
-* Create Order
-* Edit Order
-* Cancel Order
-
----
-
-## Custom Order
-
-### Features
-
-* Customer Request
-* Additional Cost
-* Optional Components
-
----
-
-## Customer Management
-
-### Features
-
-* Customer History
-* Purchase History
-
----
-
-# Shipping
-
-## Purpose
-
-Mengelola pengiriman.
-
-Catatan:
-
-Tracking masih dilakukan manual.
-
----
-
-## Shipment
-
-### Features
-
-* Create Shipment
-* Input Resi
-* Select Courier
-
----
-
-## Delivery Status
+Menjalankan proses produksi.
 
 Status:
 
-* Waiting Pickup
-* Shipped
-* Delivered
+```text
+Draft
+Released
+In Progress
+Completed
+Cancelled
+```
+
+Output:
+
+```text
+Raw Material
+↓
+Produced Component
+```
 
 ---
 
-# Reports
-
-## Sales Reports
-
-* Daily
-* Weekly
-* Monthly
-* Yearly
-
----
-
-## Inventory Reports
-
-* Stock On Hand
-* Low Stock
-* Dead Stock
-
----
-
-## Purchasing Reports
-
-* Purchase History
-* Supplier Price Trend
-
----
-
-## Manufacturing Reports
-
-* Material Usage
-* Waste Analysis
-* Yield Analysis
-
----
-
-## Assembly Reports
-
-* Component Usage
-* Product Output
-
----
-
-## Product Reports
-
-* Best Seller
-* Slow Moving
-* Profit Per Product
-
----
-
-## Channel Reports
-
-* Shopee
-* Tokopedia
-* TikTok Shop
-* WhatsApp
-* Instagram
-* Facebook
-
----
-
-## Financial Summary
-
-* Revenue
-* Material Cost
-* Packaging Cost
-* Gross Profit
-
----
-
-# Audit Log
+# Assembly Module
 
 ## Purpose
 
-Mencatat seluruh perubahan penting.
+Mengubah Produced Components dan Purchased Components menjadi Product.
+
+## Components
+
+### Assembly Recipes
+
+Mendefinisikan struktur assembly produk.
 
 ---
 
-## Tracked Activities
+### Recipe Builder
 
-* Master Data Changes
-* Recipe Changes
-* Purchase Changes
-* Inventory Adjustments
-* Work Orders
-* Assembly Orders
-* Sales Orders
+Menyusun komponen produk.
 
 ---
 
-## Stored Data
+### Assembly Orders
 
-* Timestamp
-* User
-* Action
-* Entity
-* Before Value
-* After Value
+Menjalankan proses assembly.
 
----
+Status:
 
-# Settings
+```text
+Draft
+Released
+In Progress
+Completed
+Cancelled
+```
 
-## Company Settings
+Output:
 
----
-
-## Numbering Settings
-
-Examples:
-
-PO-2026-0001
-
-WO-2026-0001
-
-AO-2026-0001
-
-SO-2026-0001
+```text
+Produced Components
++
+Purchased Components
+↓
+Product
+```
 
 ---
 
-## User Management
+# Packaging Module
 
-Roles:
+## Purpose
 
-### Owner
+Menyiapkan Product agar siap dikirim ke customer.
 
-Full Access
+Packaging bukan menghasilkan item baru.
 
----
+Packaging mengkonsumsi Packaging Material dan menambahkan biaya packaging ke HPP produk.
 
-### Production
+## Components
 
-Production + Inventory
+### Packaging Recipes
 
----
-
-### Admin
-
-Sales + Shipping
+Mendefinisikan kebutuhan Packaging Material.
 
 ---
 
-# MVP Scope
+### Recipe Builder
 
-## Included
-
-✅ Dashboard
-
-✅ Master Data
-
-✅ Purchasing
-
-✅ Inventory
-
-✅ Manufacturing
-
-✅ Assembly
-
-✅ Packaging
-
-✅ Sales
-
-✅ Shipping
-
-✅ Reports
-
-✅ Audit Log
+Menyusun Packaging Material.
 
 ---
 
-## Deferred
+### Packaging Execution
 
-❌ Accounting
+Menjalankan proses packaging.
 
-❌ Payroll
+Status:
 
-❌ HR
+```text
+Draft
+Released
+In Progress
+Completed
+Cancelled
+```
 
-❌ CRM
+Output:
 
-❌ Multi Warehouse
+```text
+Product (Assembled)
++
+Packaging Material
+↓
+Ready To Ship Product
+```
 
-❌ Multi Company
+Business Rules:
 
-❌ Forecasting
+* Tidak menghasilkan Product baru
+* Tidak mengubah quantity Product
+* Mengkonsumsi Packaging Material
+* Menambahkan Packaging Cost ke HPP
+* Mengubah status menjadi Ready To Ship
 
-❌ Mobile App
+---
+
+# Sales Module
+
+## Purpose
+
+Mengelola penjualan dan pengiriman produk.
+
+## Components
+
+### Sales Orders
+
+Mencatat pesanan customer.
+
+Status:
+
+```text
+Draft
+Confirmed
+Shipped
+Cancelled
+```
+
+Fitur:
+
+* Customer Auto Create
+* Duplicate Check
+* Price Snapshot
+* Inventory Reservation
+
+---
+
+### Inventory Reservation
+
+Saat Sales Order dikonfirmasi:
+
+```text
+Ready To Ship
+↓
+Reserved
+```
+
+Validation:
+
+```text
+Order Qty
+≤
+Available Qty
+```
+
+---
+
+### Shipments
+
+Mencatat pengiriman barang.
+
+Saat Shipment selesai:
+
+* Reservation dilepas
+* Stock berkurang
+* Revenue diakui
+* HPP diakui
+
+---
+
+### Customer History
+
+Menampilkan histori transaksi customer.
+
+---
+
+### Sales History
+
+Menampilkan histori penjualan.
+
+---
+
+# Reports Module
+
+## Purpose
+
+Menyediakan laporan operasional dan analitis.
+
+## Report Categories
+
+### Inventory Reports
+
+* Stock Balance
+* Stock Movement
+* Low Stock
+
+### Purchasing Reports
+
+* Purchase Order Summary
+* Supplier Price History
+
+### Production Reports
+
+* Work Order History
+* Production Cost Analysis
+
+### Assembly Reports
+
+* Assembly History
+* Product Cost Analysis
+
+### Packaging Reports
+
+* Packaging History
+
+### Sales Reports
+
+* Sales History
+* Product Performance
+* Channel Performance
+* Customer Performance
+
+### Profitability Reports
+
+* Gross Profit
+* Product Profitability
+
+---
+
+# System Module
+
+## Purpose
+
+Mendukung keamanan dan audit sistem.
+
+## Components
+
+### Audit Logs
+
+Mencatat perubahan data.
+
+Aktivitas:
+
+```text
+Create
+Edit
+Archive
+Restore
+```
+
+---
+
+### Activity Logs
+
+Mencatat aktivitas pengguna.
+
+Contoh:
+
+```text
+Login
+Create Purchase Order
+Complete Work Order
+Complete Assembly Order
+Complete Packaging Execution
+Create Sales Order
+Complete Shipment
+```
+
+---
+
+### Settings
+
+Konfigurasi sistem.
+
+Meliputi:
+
+* Company Settings
+* User Management
+* System Preferences
+
+---
+
+# Architecture Principles
+
+## Inventory Driven
+
+Semua proses bisnis terhubung melalui inventory.
+
+---
+
+## Recipe Based Manufacturing
+
+Production, Assembly, dan Packaging menggunakan recipe yang terversi.
+
+---
+
+## Transaction Snapshot
+
+Setiap transaksi menyimpan snapshot recipe dan harga pada saat transaksi dibuat.
+
+---
+
+## Auditability
+
+Seluruh perubahan data dan aktivitas pengguna dapat ditelusuri melalui audit log.
+
+---
+
+## MVP Scope
+
+Versi MVP tidak mencakup:
+
+```text
+Invoice Management
+Accounts Receivable
+Payment Tracking
+Purchase Request
+Approval Workflow
+POS Module
+Multi Warehouse
+Multi Company
+```
