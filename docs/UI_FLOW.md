@@ -1,826 +1,711 @@
-# Ciluba ERP - UI Flow Design v1.0
+# ERP User Interface Flow v1.1
 
-## Purpose
+## Overview
 
-Dokumen ini mendefinisikan alur penggunaan aplikasi ERP Ciluba.
+Dokumen ini menjelaskan alur navigasi dan proses utama pengguna dalam ERP Ciluba.
 
-Dokumen ini menjadi dasar:
+Flow dirancang mengikuti siklus bisnis:
 
-* UI Design
-* UX Design
-* Navigation
-* Apps Script Pages
-* Permission Design
-
----
-
-# User Roles
-
-## Owner
-
-Hak akses penuh.
-
-Fokus:
-
-* Monitoring
-* Purchasing
-* Reports
-* Master Data
-
----
-
-## Production
-
-Fokus:
-
-* Inventory
-* Production
-* Assembly
-* Packaging
-* Shipping
-
----
-
-## Admin
-
-Fokus:
-
-* Sales Order
-* Customer
-* Shipping
+```text
+Master Data
+↓
+Purchasing
+↓
+Inventory
+↓
+Production
+↓
+Assembly
+↓
+Packaging
+↓
+Sales
+↓
+Shipping
+↓
+Reporting
+```
 
 ---
 
 # Main Navigation
 
+```text
 Dashboard
 
 Master Data
+├── Materials
+├── Produced Components
+├── Purchased Components
+├── Products
+├── Suppliers
+├── Customers
+├── Sales Channels
+├── Categories
+└── Units of Measure
 
 Purchasing
+├── Purchase Orders
+├── Goods Receipts
+└── Supplier Price History
 
 Inventory
+├── Stock Overview
+├── Stock Movements
+├── Stock Opname
+└── Stock Adjustments
 
 Production
+├── Production Recipes
+├── Work Orders
 
 Assembly
+├── Assembly Recipes
+├── Assembly Orders
+
+Packaging
+├── Packaging Recipes
+├── Packaging Execution
 
 Sales
-
-Shipping
+├── Sales Orders
+├── Shipments
+├── Customer History
+└── Sales History
 
 Reports
+├── Dashboard Reports
+├── Inventory Reports
+├── Purchasing Reports
+├── Production Reports
+├── Assembly Reports
+├── Packaging Reports
+├── Sales Reports
+└── Profitability Reports
 
-Settings
+System
+├── Audit Logs
+├── Activity Logs
+└── Settings
+```
 
 ---
 
 # Dashboard Flow
 
-Login
-
-↓
-
+```text
 Dashboard
-
-↓
-
-View Business Summary
-
-Widgets:
-
-* Revenue Today
-* Orders Today
-* Low Stock
-* Open Work Orders
-* Open Assembly Orders
-* Pending Shipment
+├── Revenue Summary
+├── Gross Profit Summary
+├── Inventory Value
+├── Open Purchase Orders
+├── Open Work Orders
+├── Open Assembly Orders
+├── Pending Shipments
+├── Low Stock Alerts
+└── Recent Activities
+```
 
 ---
 
 # Master Data Flow
 
-Master Data
+## Materials
 
+```text
+Materials
 ↓
-
-Select Master Type
-
+Material List
 ↓
-
-List View
-
+Create Material
 ↓
-
-Create / Edit
+Save
+```
 
 ---
 
-Available Masters
+## Produced Components
 
-* Material
-* Purchased Component
-* Produced Component
-* Product
-* Packaging
-* Supplier
-* Customer
-* Channel
-* Courier
-* UoM
+```text
+Produced Components
+↓
+Component List
+↓
+Create Component
+↓
+Save
+```
+
+---
+
+## Purchased Components
+
+```text
+Purchased Components
+↓
+Component List
+↓
+Create Component
+↓
+Save
+```
+
+---
+
+## Products
+
+```text
+Products
+↓
+Product List
+↓
+Create Product
+↓
+Save
+```
+
+---
+
+## Suppliers
+
+```text
+Suppliers
+↓
+Supplier List
+↓
+Create Supplier
+↓
+Save
+```
+
+---
+
+## Customers
+
+```text
+Customers
+↓
+Customer List
+↓
+View History
+```
+
+Customer juga dapat dibuat otomatis melalui Sales Order.
 
 ---
 
 # Purchasing Flow
 
-Purchasing
+## Purchase Order Flow
 
+```text
+Purchase Orders
 ↓
-
-Purchase Request
-
+Create Purchase Order
 ↓
-
-Create Request
-
+Save Draft
 ↓
-
-Approve
-
+Issue PO
 ↓
-
-Purchase Order
-
-↓
-
 Receive Goods
-
 ↓
-
 Inventory Updated
+```
 
 ---
 
-# Purchase Order Flow
+## Goods Receipt Flow
 
-Purchase Order List
-
+```text
+Goods Receipts
 ↓
-
-Create Purchase Order
-
+Select Purchase Order
 ↓
-
-Select Supplier
-
+Receive Goods
 ↓
-
-Add Items
-
+Save Receipt
 ↓
-
-Save
-
+Update Inventory
 ↓
-
-Approve
-
-↓
-
-Receive
-
-↓
-
-Inventory Updated
+Update Supplier Price History
+```
 
 ---
 
 # Inventory Flow
 
-Inventory
+## Inventory Monitoring
 
+```text
+Stock Overview
 ↓
-
-Stock List
-
-↓
-
 View Stock
-
 ↓
-
-Select Item
-
+Filter
 ↓
-
-View Movement History
+Export
+```
 
 ---
 
-# Stock Opname Flow
+## Stock Movement
 
-Inventory
-
+```text
+Stock Movements
 ↓
+View Transactions
+↓
+Filter
+↓
+Export
+```
 
+---
+
+## Stock Opname
+
+```text
 Stock Opname
-
 ↓
-
-Create Opname
-
+Create Session
 ↓
-
-Input Physical Count
-
+Count Stock
 ↓
+Save Result
+```
 
-Variance Generated
+No inventory changes.
 
+---
+
+## Stock Adjustment
+
+```text
+Stock Adjustment
 ↓
-
-Approve Adjustment
-
+Review Opname Result
 ↓
-
+Adjust Stock
+↓
 Inventory Updated
+```
 
 ---
 
 # Production Flow
 
-Purpose:
+## Recipe Setup
 
-Raw Material
-
+```text
+Production Recipes
 ↓
-
-Produced Component
-
----
-
-Production
-
-↓
-
-Production Recipe
-
-↓
-
-Recipe List
-
-↓
-
 Create Recipe
-
-OR
-
-Copy Recipe
-
 ↓
-
 Recipe Builder
-
 ↓
-
-Save Recipe
+Save Draft
+↓
+Activate Version
+```
 
 ---
 
-# Recipe Builder Flow
+## Work Order Flow
 
-Select Component
-
-↓
-
-Add Materials
-
-↓
-
-Set Quantity
-
-↓
-
-Cost Preview
-
-↓
-
-Save
-
----
-
-# Work Order Flow
-
-Production
-
-↓
-
+```text
 Work Orders
-
 ↓
-
 Create Work Order
-
 ↓
-
 Select Recipe
-
 ↓
-
-Input Quantity
-
+Released
 ↓
-
-System Calculates Material Requirement
-
+In Progress
 ↓
-
-Start Production
-
+Completed
 ↓
-
-Input Actual Usage
-
+Consume Materials
 ↓
-
-Input Output Quantity
-
-↓
-
-Close Work Order
-
-↓
-
-Inventory Updated
-
----
-
-# Production Variance Flow
-
-Work Order Closed
-
-↓
-
-Compare Planned vs Actual
-
-↓
-
-Generate Variance
-
-↓
-
-Review Recipe
+Create Produced Components
+```
 
 ---
 
 # Assembly Flow
 
-Purpose:
+## Recipe Setup
 
-Produced Component
-
-*
-
-Purchased Component
-
+```text
+Assembly Recipes
 ↓
-
-Finished Goods
-
----
-
-Assembly
-
-↓
-
-Assembly Recipe
-
-↓
-
 Create Recipe
-
-OR
-
-Copy Recipe
-
 ↓
-
-Save Recipe
+Recipe Builder
+↓
+Save Draft
+↓
+Activate Version
+```
 
 ---
 
-# Assembly Order Flow
+## Assembly Order Flow
 
-Assembly
-
-↓
-
+```text
 Assembly Orders
-
 ↓
-
-Create Order
-
+Create Assembly Order
 ↓
-
-Select Product
-
-↓
-
 Select Recipe
-
 ↓
-
-Input Quantity
-
+Released
 ↓
-
-System Calculates Components
-
+In Progress
 ↓
-
-Assemble Product
-
+Completed
 ↓
-
-Input Actual Output
-
+Consume Components
 ↓
-
-Close Assembly Order
-
-↓
-
-Inventory Updated
+Create Product
+```
 
 ---
 
 # Packaging Flow
 
-Packaging
+## Recipe Setup
 
+```text
+Packaging Recipes
 ↓
-
-Packaging Recipe
-
+Create Recipe
 ↓
-
-Packaging Builder
-
+Recipe Builder
 ↓
-
-Save Recipe
+Save Draft
+↓
+Activate Version
+```
 
 ---
 
-# Packaging Execution Flow
+## Packaging Execution Flow
 
-Packaging
-
+```text
+Packaging Execution
 ↓
-
-Ready To Pack
-
+Create Execution
 ↓
-
 Select Product
-
 ↓
-
-Input Quantity
-
+Released
 ↓
-
-Consume Packaging Materials
-
+In Progress
 ↓
-
+Completed
+↓
+Consume Packaging Material
+↓
+Add Packaging Cost
+↓
 Mark Ready To Ship
+```
 
 ---
 
 # Sales Flow
 
-Sales
+## Sales Order Flow
 
+```text
+Sales Orders
 ↓
-
-Sales Order
-
+Create Sales Order
 ↓
-
-Create Order
-
+Customer Lookup
 ↓
-
-Select Customer
-
+Auto Create Customer (If Needed)
 ↓
-
-Select Channel
-
-↓
-
 Add Products
-
 ↓
-
-Calculate Total
-
+Save Draft
 ↓
-
-Save Order
+Confirm Order
+↓
+Reserve Inventory
+```
 
 ---
 
-# Custom Order Flow
+## Reservation Logic
 
-Sales
+```text
+Ready To Ship
+-
+Reserved
+=
+Available
+```
 
+---
+
+## Validation
+
+```text
+Order Qty
+≤
+Available Qty
+```
+
+---
+
+## Cancel Sales Order
+
+```text
+Sales Order
 ↓
-
-Create Order
-
+Cancel
 ↓
-
-Enable Custom Order
-
-↓
-
-Input Custom Notes
-
-↓
-
-Additional Cost
-
-↓
-
-Save
+Release Reservation
+```
 
 ---
 
 # Shipping Flow
 
-Shipping
+## Shipment Flow
 
+```text
+Shipments
 ↓
-
-Ready To Ship Orders
-
-↓
-
 Create Shipment
-
 ↓
-
-Select Courier
-
+Select Sales Order
 ↓
-
-Input Resi
-
+Generate Shipment
 ↓
-
-Mark Shipped
+Ship Order
+↓
+Release Reservation
+↓
+Reduce Inventory
+↓
+Recognize Revenue
+↓
+Recognize HPP
+```
 
 ---
 
-# Delivery Update Flow
+# Customer History Flow
 
-Shipment
-
+```text
+Customer
 ↓
-
-Update Status
-
+Open Customer
 ↓
+View Orders
+↓
+View Revenue
+↓
+View Purchase History
+```
 
-Delivered
+---
 
-Catatan:
+# Sales History Flow
 
-Tracking masih manual.
+```text
+Sales History
+↓
+Filter
+↓
+Analyze Sales
+↓
+Export
+```
 
 ---
 
 # Reporting Flow
 
+## Inventory Reports
+
+```text
 Reports
-
 ↓
-
-Select Report
-
-↓
-
-Select Period
-
-↓
-
-Generate Report
+Inventory Reports
+├── Stock Balance
+├── Stock Movement
+└── Low Stock
+```
 
 ---
 
-Available Reports
+## Purchasing Reports
 
-Sales
-
-Inventory
-
-Purchasing
-
-Production
-
-Assembly
-
-Channel
-
-Profitability
-
-Dead Stock
-
-Best Seller
+```text
+Reports
+↓
+Purchasing Reports
+├── Purchase Orders
+└── Supplier Price History
+```
 
 ---
 
-# Audit Log Flow
+## Production Reports
 
-Settings
-
+```text
+Reports
 ↓
+Production Reports
+├── Work Order History
+└── Production Cost Analysis
+```
 
-Audit Log
+---
 
+## Assembly Reports
+
+```text
+Reports
 ↓
+Assembly Reports
+├── Assembly History
+└── Product Cost Analysis
+```
 
-Search Activity
+---
 
+## Packaging Reports
+
+```text
+Reports
 ↓
+Packaging Reports
+└── Packaging History
+```
 
+---
+
+## Sales Reports
+
+```text
+Reports
+↓
+Sales Reports
+├── Sales History
+├── Product Performance
+├── Channel Performance
+└── Customer Performance
+```
+
+---
+
+## Profitability Reports
+
+```text
+Reports
+↓
+Profitability Reports
+├── Gross Profit
+└── Product Profitability
+```
+
+---
+
+# Audit Flow
+
+## Audit Logs
+
+```text
+Audit Logs
+↓
+Filter
+↓
 View Changes
+```
 
 ---
 
-# Recipe Revision Flow
+## Activity Logs
 
-Production Recipe
-
-OR
-
-Assembly Recipe
-
+```text
+Activity Logs
 ↓
-
-Open Recipe
-
+Filter
 ↓
-
-Create New Version
-
-↓
-
-Edit Components
-
-↓
-
-Save Version
-
-↓
-
-Old Version Archived
+View Activities
+```
 
 ---
 
-# Low Stock Alert Flow
+# End-to-End Business Flow
 
+```text
+Materials Purchased
+↓
+Goods Receipt
+↓
 Inventory
 
+Raw Materials
 ↓
-
-System Detects Minimum Stock
-
+Work Order
 ↓
+Produced Components
 
-Generate Alert
-
+Produced Components
++
+Purchased Components
 ↓
-
-Owner Reviews
-
+Assembly Order
 ↓
-
-Create Purchase Request
-
----
-
-# Daily Operational Flow
-
-Production User
-
-Login
-
-↓
-
-Check Open Work Orders
-
-↓
-
-Produce Components
-
-↓
-
-Close Work Orders
-
-↓
-
-Check Open Assembly Orders
-
-↓
-
-Assemble Products
-
-↓
-
-Package Products
-
-↓
-
-Create Shipment
-
-↓
-
-Logout
-
----
-
-# Owner Daily Flow
-
-Login
-
-↓
-
-Dashboard
-
-↓
-
-Review Sales
-
-↓
-
-Review Stock Alerts
-
-↓
-
-Review Purchases
-
-↓
-
-Review Production
-
-↓
-
-Review Profitability
-
-↓
-
-Logout
-
----
-
-# MVP Pages
-
-Dashboard
-
-Materials
-
-Components
+Products (Assembled)
 
 Products
++
+Packaging Materials
+↓
+Packaging Execution
+↓
+Ready To Ship Products
 
-Suppliers
+Sales Order
+↓
+Inventory Reservation
 
-Customers
+Shipment
+↓
+Inventory Reduction
+↓
+Revenue Recognition
+↓
+HPP Recognition
+```
 
-Purchase Orders
+---
 
-Inventory
+# MVP Exclusions
 
-Stock Opname
+Tidak termasuk dalam MVP:
 
-Production Recipes
+```text
+Purchase Request
 
-Work Orders
+Approval Workflow
 
-Assembly Recipes
+Invoice Management
 
-Assembly Orders
+Accounts Receivable
 
-Sales Orders
+Payment Tracking
 
-Shipments
+POS Module
 
-Reports
+Multi Warehouse
 
-Audit Log
-
-Settings
+Multi Company
+```
