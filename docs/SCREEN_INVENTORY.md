@@ -1,6 +1,6 @@
 # Ciluba ERP
 
-Version: 1.0
+Version: 1.1
 
 ---
 
@@ -40,6 +40,7 @@ Actions:
 * View
 * Edit
 * Archive
+* Restore
 
 Tidak menggunakan Hard Delete.
 
@@ -94,168 +95,51 @@ Membantu operasional sesuai hak akses yang diberikan.
 
 # Master Data Module
 
-## Materials
+## Categories
 
-| Screen    | Type               | Purpose             | Roles             |
-| --------- | ------------------ | ------------------- | ----------------- |
-| Materials | Table + Modal CRUD | Raw Material Master | Owner, Operations |
-
-Actions:
-
-* Create
-* View
-* Edit
-* Archive
+| Screen              | Type               | Purpose               | Roles |
+| ------------------- | ------------------ | --------------------- | ----- |
+| Material Categories | Table + Modal CRUD | Kategori Raw Material | Owner |
+| Product Categories  | Table + Modal CRUD | Kategori Product      | Owner |
 
 ---
 
-## Purchased Components
+## Inventory Masters
 
 | Screen               | Type               | Purpose                    | Roles             |
 | -------------------- | ------------------ | -------------------------- | ----------------- |
+| Materials            | Table + Modal CRUD | Raw Material Master        | Owner, Operations |
 | Purchased Components | Table + Modal CRUD | Purchased Component Master | Owner, Operations |
-
-Actions:
-
-* Create
-* View
-* Edit
-* Archive
+| Produced Components  | Table + Modal CRUD | Produced Component Master  | Owner, Operations |
+| Products             | Table + Modal CRUD | Finished Goods Master      | Owner, Operations |
+| Packaging Materials  | Table + Modal CRUD | Packaging Material Master  | Owner, Operations |
 
 ---
 
-## Produced Components
-
-| Screen              | Type               | Purpose                   | Roles             |
-| ------------------- | ------------------ | ------------------------- | ----------------- |
-| Produced Components | Table + Modal CRUD | Produced Component Master | Owner, Operations |
-
-Actions:
-
-* Create
-* View
-* Edit
-* Archive
-
----
-
-## Products
-
-| Screen   | Type               | Purpose               | Roles             |
-| -------- | ------------------ | --------------------- | ----------------- |
-| Products | Table + Modal CRUD | Finished Goods Master | Owner, Operations |
-
-Actions:
-
-* Create
-* View
-* Edit
-* Archive
-
----
-
-## Packaging Materials
-
-| Screen              | Type               | Purpose                   | Roles             |
-| ------------------- | ------------------ | ------------------------- | ----------------- |
-| Packaging Materials | Table + Modal CRUD | Packaging Material Master | Owner, Operations |
-
-Actions:
-
-* Create
-* View
-* Edit
-* Archive
-
----
-
-## Suppliers
+## Business Partners
 
 | Screen    | Type               | Purpose         | Roles             |
 | --------- | ------------------ | --------------- | ----------------- |
 | Suppliers | Table + Modal CRUD | Supplier Master | Owner, Operations |
-
-Actions:
-
-* Create
-* View
-* Edit
-* Archive
-
----
-
-## Customers
-
-| Screen    | Type               | Purpose         | Roles             |
-| --------- | ------------------ | --------------- | ----------------- |
 | Customers | Table + Modal CRUD | Customer Master | Owner, Operations |
 
-Actions:
-
-* Create
-* View
-* Edit
-* Archive
-
 ---
 
-## Channels
+## Sales Masters
 
 | Screen   | Type               | Purpose              | Roles             |
 | -------- | ------------------ | -------------------- | ----------------- |
 | Channels | Table + Modal CRUD | Sales Channel Master | Owner, Operations |
-
-Actions:
-
-* Create
-* View
-* Edit
-* Archive
+| Couriers | Table + Modal CRUD | Courier Master       | Owner, Operations |
 
 ---
 
-## Couriers
+## System Masters
 
-| Screen   | Type               | Purpose        | Roles             |
-| -------- | ------------------ | -------------- | ----------------- |
-| Couriers | Table + Modal CRUD | Courier Master | Owner, Operations |
-
-Actions:
-
-* Create
-* View
-* Edit
-* Archive
-
----
-
-## UoM
-
-| Screen | Type               | Purpose                | Roles |
-| ------ | ------------------ | ---------------------- | ----- |
-| UoM    | Table + Modal CRUD | Unit of Measure Master | Owner |
-
-Actions:
-
-* Create
-* View
-* Edit
-* Archive
-
----
-
-## UoM Conversions
-
-| Screen          | Type               | Purpose              | Roles |
-| --------------- | ------------------ | -------------------- | ----- |
-| UoM Conversions | Table + Modal CRUD | UoM Conversion Rules | Owner |
-
-Actions:
-
-* Create
-* View
-* Edit
-* Archive
+| Screen          | Type               | Purpose                | Roles |
+| --------------- | ------------------ | ---------------------- | ----- |
+| UoM             | Table + Modal CRUD | Unit of Measure Master | Owner |
+| UoM Conversions | Table + Modal CRUD | UoM Conversion Rules   | Owner |
 
 ---
 
@@ -265,18 +149,18 @@ Actions:
 | ---------------------- | ----------- | ------------------------- | ----------------- |
 | Purchase Orders        | List + Form | Purchase Order Management | Owner, Operations |
 | Goods Receipts         | List + Form | Goods Receipt Management  | Owner, Operations |
-| Supplier Price History | Page        | Supplier Price Tracking   | Owner, Operations |
+| Supplier Price History | Page        | Histori Harga Supplier    | Owner, Operations |
 
 ---
 
 # Inventory Module
 
-| Screen           | Type        | Purpose                       | Roles             |
-| ---------------- | ----------- | ----------------------------- | ----------------- |
-| Stock Overview   | Page        | Inventory Position Overview   | Owner, Operations |
-| Stock Movement   | Page        | Inventory Transaction History | Owner, Operations |
-| Stock Opname     | List + Form | Stock Counting Process        | Owner, Operations |
-| Stock Adjustment | List + Form | Inventory Correction          | Owner             |
+| Screen           | Type        | Purpose                  | Roles             |
+| ---------------- | ----------- | ------------------------ | ----------------- |
+| Stock Overview   | Page        | Ringkasan Posisi Stock   | Owner, Operations |
+| Stock Movement   | Page        | Histori Pergerakan Stock | Owner, Operations |
+| Stock Opname     | List + Form | Proses Stock Opname      | Owner, Operations |
+| Stock Adjustment | List + Form | Koreksi Stock            | Owner             |
 
 ---
 
@@ -329,24 +213,24 @@ Actions:
 
 # Reports Module
 
-| Screen                     | Type   | Purpose                   | Roles |
-| -------------------------- | ------ | ------------------------- | ----- |
-| Sales Report               | Report | Sales Analysis            | Owner |
-| Purchasing Report          | Report | Purchasing Analysis       | Owner |
-| Inventory Report           | Report | Inventory Analysis        | Owner |
-| Production Report          | Report | Production Analysis       | Owner |
-| Assembly Report            | Report | Assembly Analysis         | Owner |
-| Packaging Report           | Report | Packaging Analysis        | Owner |
-| Profitability Report       | Report | Revenue & Profit Analysis | Owner |
-| Channel Performance Report | Report | Sales Channel Analysis    | Owner |
+| Screen                     | Type   | Purpose                  | Roles |
+| -------------------------- | ------ | ------------------------ | ----- |
+| Sales Report               | Report | Analisa Penjualan        | Owner |
+| Purchasing Report          | Report | Analisa Pembelian        | Owner |
+| Inventory Report           | Report | Analisa Persediaan       | Owner |
+| Production Report          | Report | Analisa Produksi         | Owner |
+| Assembly Report            | Report | Analisa Assembly         | Owner |
+| Packaging Report           | Report | Analisa Packaging        | Owner |
+| Profitability Report       | Report | Analisa Profit & HPP     | Owner |
+| Channel Performance Report | Report | Analisa Performa Channel | Owner |
 
 ---
 
 # Audit Module
 
-| Screen     | Type | Purpose               | Roles |
-| ---------- | ---- | --------------------- | ----- |
-| Audit Logs | Page | System Change History | Owner |
+| Screen     | Type | Purpose                  | Roles |
+| ---------- | ---- | ------------------------ | ----- |
+| Audit Logs | Page | Histori Perubahan Sistem | Owner |
 
 ---
 
@@ -358,39 +242,95 @@ Actions:
 
 ## Master Data
 
-11 Screens
+13 Screens
+
+### Categories
+
+2 Screens
+
+* Material Categories
+* Product Categories
+
+### Inventory Masters
+
+5 Screens
+
+* Materials
+* Purchased Components
+* Produced Components
+* Products
+* Packaging Materials
+
+### Business Partners
+
+2 Screens
+
+* Suppliers
+* Customers
+
+### Sales Masters
+
+2 Screens
+
+* Channels
+* Couriers
+
+### System Masters
+
+2 Screens
+
+* UoM
+* UoM Conversions
+
+---
 
 ## Purchasing
 
 3 Screens
 
+---
+
 ## Inventory
 
 4 Screens
+
+---
 
 ## Production
 
 3 Screens
 
+---
+
 ## Assembly
 
 3 Screens
+
+---
 
 ## Packaging
 
 3 Screens
 
+---
+
 ## Sales
 
 1 Screen
+
+---
 
 ## Shipping
 
 2 Screens
 
+---
+
 ## Reports
 
 8 Screens
+
+---
 
 ## Audit
 
@@ -400,7 +340,7 @@ Actions:
 
 # Total Screens
 
-40 Screens
+42 Screens
 
 ---
 
@@ -413,6 +353,10 @@ Screen Inventory hanya mendefinisikan:
 * Tipe Screen
 * Hak Akses
 
-Field, layout, validation, workflow, dan business rules akan dijelaskan pada:
+Field, layout, validation, workflow, business rules, dan UI behavior akan dijelaskan pada:
 
-SCREEN_SPECIFICATIONS.md
+SCREEN_SPECIFICATIONS_PART_1.md
+SCREEN_SPECIFICATIONS_PART_2.md
+SCREEN_SPECIFICATIONS_PART_3.md
+SCREEN_SPECIFICATIONS_PART_4.md
+SCREEN_SPECIFICATIONS_PART_5.md
