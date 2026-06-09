@@ -836,20 +836,6 @@ Google Spreadsheet
 
 ---
 
-Folder Structure:
-
-src/
-
-core/
-
-repositories/
-
-services/
-
-ui/
-
----
-
 # 22. SINGLE SOURCE OF TRUTH
 
 Dokumen ini adalah referensi tertinggi proyek.
